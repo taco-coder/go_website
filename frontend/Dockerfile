@@ -1,3 +1,3 @@
 FROM httpd:2.4
-COPY template/index.html /var/www/html/
+COPY template/index.html /usr/local/apache2/htdocs
 EXPOSE 80
