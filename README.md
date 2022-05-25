@@ -5,3 +5,6 @@ This project is intended to teach me about Go, Go-Gin, a little bit of Docker an
 Just barely got a Docker container running Apache to house the static HTML and JS files.
 ### To-Do
 Still need to create the first full round trip which will be user authentication. Once I've implemented the first API call that makes its way across the containers, the rest will get easier cause the architecture and connections will have been figured out. 
+
+#### Side Note
+The front end of this site might look ugly for a while cause I'm more of a backend focused guy and don't know any cool and fancy frontend frameworks like React. Just jQuery.
