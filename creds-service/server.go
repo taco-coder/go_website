@@ -1,10 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+)
+
+const (
+	// TODO fill this in directly or through environment variable
+	// Build a DSN e.g. postgres://username:password@url.com:5432/dbName
+	DB_DSN = "postgres://admin:DendronLover123!@ec2-3-83-140-90.compute-1.amazonaws.com:5432/credentials"
 )
 
 func get_response(ctx *gin.Context) {
@@ -14,6 +21,11 @@ func get_response(ctx *gin.Context) {
 }
 
 func post_data(ctx *gin.Context) {
+	db, err := sql.Open("postgres", DB_DSN)
+	if err != nil {
+		print("Failed to open a DB connection: ", err)
+	}
+	defer db.Close()
 	//hash the creds
 	user, user_err := bcrypt.GenerateFromPassword([]byte(ctx.PostForm("user")), bcrypt.DefaultCost)
 	pass, pass_err := bcrypt.GenerateFromPassword([]byte(ctx.PostForm("pass")), bcrypt.DefaultCost)
