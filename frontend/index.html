@@ -7,20 +7,33 @@
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
 
 <body>
     <!--Intro banner at front page-->
-    <div>
-        <button onclick="getResponse();">Click Me!</button>
-        <div id="responseField"></div>
-    </div>
-    <form>
-        <input type="text" id="first" placeholder="firstname" name="first"></input>
-        <input type="text" id="last" placeholder="lastname" name="last"></input>
-        <input type="submit" onclick="return send_form();"></input>
-    </form>
 
+    </div>
+    <div id="loginForm" class="ui-grid-d" style="padding: 10%;">
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b"></div>
+        <div class="ui-block-c">
+            <p>Sign into your account</p>
+            <form>
+                <label for="username" id="creds">Username:</label>
+                <input type="text" id="user" placeholder="username" required></input>
+                <label for="username" id="creds">Password:</label>
+                <input type="password" id="pass" placeholder="password" required></input>
+                <input class="creds-btn" type="submit" value="Login" onclick="return send_form();"></input>
+                <input class="creds-btn" type="button" value="Create Account" onclick="alert('click');"
+                    data-theme="b"></input>
+            </form>
+        </div>
+        <div class="ui-block-d"></div>
+        <div class="ui-block-e"></div>
+    </div>
     <script type="text/javascript" src="index.js"></script>
 </body>
 

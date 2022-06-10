@@ -1,3 +1,6 @@
+$(".creds-btn").button({
+  inline: "true",
+});
 function getResponse() {
   $.getJSON("https://t32m4gek4d.execute-api.us-east-1.amazonaws.com/dev/get_response", function (data) {
     $('#responseField').html(data.message);
