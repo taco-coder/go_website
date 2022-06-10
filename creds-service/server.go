@@ -5,13 +5,12 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 )
 
 const (
-	// TODO fill this in directly or through environment variable
-	// Build a DSN e.g. postgres://username:password@url.com:5432/dbName
-	DB_DSN = "postgres://admin:DendronLover123!@ec2-3-83-140-90.compute-1.amazonaws.com:5432/credentials"
+	DB_DSN = "host=52.73.10.26 port=5432 user=crud_user password=DendronLover123! dbname=credentials sslmode=disable"
 )
 
 func get_response(ctx *gin.Context) {
@@ -21,11 +20,6 @@ func get_response(ctx *gin.Context) {
 }
 
 func post_data(ctx *gin.Context) {
-	db, err := sql.Open("postgres", DB_DSN)
-	if err != nil {
-		print("Failed to open a DB connection: ", err)
-	}
-	defer db.Close()
 	//hash the creds
 	user, user_err := bcrypt.GenerateFromPassword([]byte(ctx.PostForm("user")), bcrypt.DefaultCost)
 	pass, pass_err := bcrypt.GenerateFromPassword([]byte(ctx.PostForm("pass")), bcrypt.DefaultCost)
@@ -56,11 +50,47 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+type User struct {
+	id    int
+	first string
+	last  string
+}
+
+//temp db test function redo the db server using that guide
+func db_test(ctx *gin.Context) {
+	db, err := sql.Open("postgres", DB_DSN)
+	if err != nil {
+		print("Failed to open a DB connection: ", err)
+	}
+	err = db.Ping()
+	if err != nil {
+		print("\nNo open: ", err.Error())
+	}
+	defer db.Close()
+	var first string
+	var last string
+	result, excerr := db.Exec("INSERT INTO users (first, last) VALUES ($1, $2)", "new", "insertion")
+	if excerr != nil {
+		print(excerr.Error())
+	}
+	print(result.LastInsertId())
+	rows := db.QueryRow("SELECT first, last FROM users WHERE id =$1", 2)
+	switch scanErr := rows.Scan(&first, &last); scanErr {
+	case sql.ErrNoRows:
+		print("\n No Rows!\n")
+	case nil:
+		print("successfully copied\n")
+	default:
+	}
+	ctx.JSON(200, gin.H{"result": rows, "message": "good", "first": first, "last": last})
+}
+
 func main() {
 	router := gin.Default()
 
 	router.Use(CORSMiddleware())
 	router.GET("/get_response", get_response)
+	router.GET("/db_test", db_test)
 	router.POST("/post_data", post_data)
 	router.Run() // listen and serve on 0.0.0.0:8080
 }
